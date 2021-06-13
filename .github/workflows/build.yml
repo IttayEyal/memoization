@@ -24,3 +24,6 @@ jobs:
     - name: Test with pytest
       run: |
         pytest -s --verbose test.py
+    - name: Lint
+      run: |
+        black -v --check test.py memoize
