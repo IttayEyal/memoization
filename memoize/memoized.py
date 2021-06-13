@@ -60,7 +60,7 @@ class Memoized(object):
         self.func = func 
         self.filename = os.path.basename( self.func.__code__.co_filename ) 
 
-        def wrappedFunc(**args): 
+        def wrappedFunc(*args, **kwargs):
             """Memoization wrapper function. The wrapped function is already 
             stored in self.func. This one gets the arguments as parameters. 
             
@@ -69,10 +69,10 @@ class Memoized(object):
             arguments. 
             """
             if Memoized.cacheDir == None: 
-                return self.func(**args) 
+                return self.func(*args, **kwargs)
             
-            nameWithArgs = self.filename + moreCanonicalStr(args)
-            hashKey = hashlib.sha1(nameWithArgs.encode("utf-8")).hexdigest() 
+            nameWithArgs = (self.filename, self.func.__name__, moreCanonicalStr(args), moreCanonicalStr(kwargs))
+            hashKey = hashlib.sha1(str(nameWithArgs).encode("utf-8")).hexdigest()
             filePath = self.cacheDir + "/" + hashKey + ".cache"
             ret = None
             if Memoized.readCache and os.path.exists(filePath): 
@@ -91,13 +91,13 @@ class Memoized(object):
                                             " taken from cache.\n") 
                 return ret 
             else: 
-                ret = self.func(**args) 
+                ret = self.func(*args, **kwargs)
                 resultFile = open(filePath, "wb") 
                 pickle.dump(ret, resultFile) 
                 resultFile.close() 
                 return ret 
         
-        return wrappedFunc 
+        return wrappedFunc
 
     def __repr__(self):
         '''Return the function's docstring.'''
