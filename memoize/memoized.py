@@ -13,6 +13,8 @@ import pickle
 from sys import stderr
 import queue
 import threading
+import platform
+import tempfile
 
 
 def moreCanonicalStr(var):
@@ -48,8 +50,10 @@ class Memoized(object):
         """Initialization of the Memozied object. This is called once, when the
         object is initialized.
         """
-        if cacheDir != None:
-            Memoized.cacheDir = cacheDir
+        system_cache_dir = (
+            "/tmp" if platform.system() == "Darwin" else tempfile.gettempdir()
+        )
+        self.cacheDir = cacheDir or system_cache_dir
         if debug != None:
             self.debug = debug
 
