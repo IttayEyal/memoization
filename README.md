@@ -2,7 +2,7 @@ Memoization decorator for python
 === 
 Add @Memoized before function definition for automatic caching. 
 
-On the first call to the function the decorator runs it with the provided parameters. Then it stores the returned result in a file. In subsequent calls to the function with the same parameters, the decorator returns the results from the cache file without calling the function. The decorator matches the function text and the parameters, so if the function or the parameters change the function will be run again. 
+On the first call to the function the decorator runs it with the provided parameters. Then it stores the returned result in a file. In subsequent calls to the function with the same parameters, the decorator returns the results from the cache file without calling the function. The decorator matches the function code (text) and the parameters, so if the function or the parameters change the function will be run again. 
 
     from memoize.memoized import Memoized
     import time
