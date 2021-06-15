@@ -27,6 +27,11 @@ def get_random_with_args_and_kwargs(num, n=0):
     return random.random() + num + n
 
 
+@Memoized()
+def get_str_with_random(obj):
+    return str(obj) + str(random.random())
+
+
 # Tests
 def test_basic_memoization():
     assert get_random() == get_random()
@@ -52,6 +57,37 @@ def test_args_and_kwargs_memoization():
     assert get_random_with_args_and_kwargs(1, n=2) != get_random_with_args_and_kwargs(
         2, n=2
     )
+
+
+def test_nested_input():
+    list_1 = [1, 2, 3]
+    list_2 = list_1.copy()
+    list_3 = [4, 5, 6]
+
+    dict_1 = {1: 2, 3: 4}
+    dict_2 = dict_1.copy()
+    dict_3 = {5: 6, 7: 8}
+
+    nested_object = {
+        "dict_1": dict_1,
+        "nested": {"nested": {"nested": dict_2}},
+        "lists": [list_1, list_2],
+    }
+
+    # List memoization
+    assert get_str_with_random(list_1) == get_str_with_random(list_2)
+    assert get_str_with_random(list_1) != get_str_with_random(list_3)
+
+    # Dict memoization
+    assert get_str_with_random(dict_1) == get_str_with_random(dict_2)
+    assert get_str_with_random(dict_1) != get_str_with_random(dict_3)
+
+    # Nested object memoization
+    str_1 = get_str_with_random(nested_object)
+    str_2 = get_str_with_random(nested_object)
+    str_3 = get_str_with_random(dict_3)
+    assert str_1 == str_2
+    assert str_1 != str_3
 
 
 def test_function_mixup():
