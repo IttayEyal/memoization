@@ -1,3 +1,4 @@
+import time
 import random
 from memoize.memoized import Memoized
 
@@ -32,6 +33,12 @@ def get_str_with_random(obj):
     return str(obj) + str(random.random())
 
 
+@Memoized()
+def wait_and_return_random(wait_time_seconds):
+    time.sleep(wait_time_seconds)
+    return random.random()
+
+
 # Tests
 def test_basic_memoization():
     assert get_random() == get_random()
@@ -57,6 +64,24 @@ def test_args_and_kwargs_memoization():
     assert get_random_with_args_and_kwargs(1, n=2) != get_random_with_args_and_kwargs(
         2, n=2
     )
+
+
+def test_long_running_function():
+    """Are we running the function again or using the memoized version?"""
+    wait_time_seconds = 0.5 + random.random() / 10
+    max_memoized_duration = 0.01
+
+    # First call should take some time
+    start_time = time.time()
+    wait_and_return_random(wait_time_seconds)
+    duration = time.time() - start_time
+    assert duration >= wait_time_seconds
+
+    # Memoized call should be instant
+    start_time = time.time()
+    wait_and_return_random(wait_time_seconds)
+    duration = time.time() - start_time
+    assert duration <= max_memoized_duration
 
 
 def test_nested_input():
