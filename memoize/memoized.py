@@ -17,6 +17,7 @@ import platform
 import tempfile
 import inspect
 
+
 def moreCanonicalStr(var):
     """Return a string representation of var, similar to the one obtained by
     str, only when iterating through dictionaries, go by key order.
