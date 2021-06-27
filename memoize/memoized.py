@@ -61,7 +61,6 @@ class Memoized(object):
         """Initialization of the Memoized object. This is called once, with the
         name of the function to be wrapped.
         The actual wrapper is returned.
-        Note: Calls to the function must be with named arguments, not positional.
         """
         self.func = func
         self.filename = os.path.basename(self.func.__code__.co_filename)
