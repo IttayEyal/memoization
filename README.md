@@ -7,6 +7,8 @@ On the first call to the function the decorator runs it with the provided parame
     from memoize.memoized import Memoized
     import time
 
+    # Memoized.readCache = False
+
     @Memoized(cacheDir = "/home/username/tmp") # cacheDir defaults to /tmp in Linux 
     def fibonacci(n):
         if n <= 2: return 1
