@@ -4,7 +4,7 @@ import time
 # Memoized.readCache = False
 
 
-@Memoized()
+@Memoized(cacheDir="/home/username/tmp")  # cacheDir defaults to /tmp in Linux
 def fibonacci(n):
     if n <= 2:
         return 1
