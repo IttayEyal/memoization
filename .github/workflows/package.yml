@@ -1,0 +1,23 @@
+name: Package and run the examples
+
+on: [push]
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Create a source package
+      run: |
+        python setup.py sdist
+    - name: Run the example
+      run: |
+        python setup.py install
+        python example.py
