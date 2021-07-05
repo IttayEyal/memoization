@@ -1,35 +1,27 @@
-from memoize.memoized import Memoized
+from memoize import Memoized
 import time
 
-# Memoized.readCache = False
-
-
-@Memoized(cacheDir="/home/username/tmp")  # cacheDir defaults to /tmp in Linux
+@Memoized()
 def fibonacci(n):
+    print('Running the fibonacci() function')
     if n <= 2:
         return 1
-
-    a = 1
-    b = 1
-    k = 2
-    while k < n:
+    a, b = 1, 1
+    for i in range(2, n):
         c = a + b
-        a = b
-        b = c
-        k += 1
-
+        a, b = b, c
     return b
 
+n = int(3e5)
 
-n = 3e5
-start = time.time()
-runOne = fibonacci(n)
-finish = time.time()
-print("Runtime 1: %.2f" % (finish - start))
+start_time = time.time()
+first_run = fibonacci(n)
+duration = time.time() - start_time
+print("Runtime 1: %.2f" % duration)
 
-start = time.time()
-runTwo = fibonacci(n)
-finish = time.time()
-print("Runtime 2: %.2f" % (finish - start))
+start_time = time.time()
+second_run = fibonacci(n)
+duration = time.time() - start_time
+print("Runtime 2: %.2f" % duration)
 
-assert runOne == runTwo
+assert first_run == second_run
