@@ -46,9 +46,7 @@ Output:
 Set `Memoized.readCache` to False to skip reading the cache (but store results there nonetheless). 
 
 ```python
-class Memoized(cacheDir=None, debug=None)
+class Memoized(cacheDir=None)
 ```
 
-* `cacheDir`: Manually set the cache dir. Defaults to the system tmp dir, which is `/tmp` for POSIX and Mac.
-* `debug`: Set a truthy value to enable verbose logging to `stderr`.
-
+* `cacheDir`: Manually set the cache dir. Defaults to the [system's global tmp dir](https://docs.python.org/3/library/tempfile.html#tempfile.gettempdir), which is `/tmp` for POSIX and Mac.
