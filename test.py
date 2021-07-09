@@ -1,6 +1,8 @@
 import time
 import random
 from memoize.memoized import Memoized
+from subprocess import Popen, PIPE
+import re
 
 # Tested functions
 @Memoized()
@@ -118,3 +120,39 @@ def test_nested_input():
 def test_function_mixup():
     """Make sure that different functions with the same args are cached under different keys"""
     assert get_random_with_args(1) != get_another_random_with_args(1)
+
+
+def callTextChangeTest():
+    process = Popen(["python", "textChangeTest.py"], stdout=PIPE)
+    (output, err) = process.communicate()
+    exit_code = process.wait()
+    assert exit_code == 0
+
+    return output.strip()
+
+
+def changeText(orig, new):
+    with open("textChangeTest.py", "r+") as f:
+        text = f.read()
+        text = re.sub(orig, new, text)
+        f.seek(0)
+        f.write(text)
+        f.truncate()
+        f.close()
+
+
+def test_function_text_change():
+    changeText("World", "Hello")  # Assuming there was a previous test
+
+    output1 = callTextChangeTest()
+    output2 = callTextChangeTest()
+    assert output1 == output2
+
+    changeText("Hello", "World")
+
+    output3 = callTextChangeTest()
+    assert output3 != output1
+
+
+if __name__ == "__main__":
+    test_function_text_change()
