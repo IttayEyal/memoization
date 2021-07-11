@@ -134,7 +134,9 @@ def callTextChangeTest():
 def changeText(orig, new):
     with open("textChangeTest.py", "r+") as f:
         text = f.read()
-        text = re.sub(orig, new, text)
+filename = "textChangeTest.py"
+with open(filename, 'w') as f:
+    f.write(re.sub(orig, new, text))
         f.seek(0)
         f.write(text)
         f.truncate()
