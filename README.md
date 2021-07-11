@@ -1,8 +1,8 @@
 Memoization decorator for python 
 === 
-Add @Memoized before function definition for automatic caching. 
+Add `@Memoized()` before the function definition for automatic filesystem caching. 
 
-On the first call to the function the decorator runs it with the provided parameters. Then it stores the returned result in a file. In subsequent calls to the function with the same parameters, the decorator returns the results from the cache file without calling the function. The decorator matches the function code (text) and the parameters, so if the function or the parameters change the function will be run again. 
+On the first call to the function, the decorator runs it with the provided parameters. Then it stores the returned result in a file. In subsequent calls to the function with the same parameters, the decorator returns the results from the cache file without calling the function. The decorator matches the function code (text) and the parameters, so if the function or the parameters change the function will be run again. 
 
 ```python
 from memoize import Memoized
@@ -36,7 +36,17 @@ assert first_run == second_run
 
 Output: 
 
+    Running the fibonacci() function  # Note that this appears only once!
     Runtime 1: 0.94
     Runtime 2: 0.00
 
+## API
+
+
 Set `Memoized.readCache` to False to skip reading the cache (but store results there nonetheless). 
+
+```python
+class Memoized(cacheDir=None)
+```
+
+* `cacheDir`: Manually set the cache dir. Defaults to the [system's global tmp dir](https://docs.python.org/3/library/tempfile.html#tempfile.gettempdir), which is `/tmp` for POSIX and Mac.
