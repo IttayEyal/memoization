@@ -122,21 +122,22 @@ def test_function_mixup():
     assert get_random_with_args(1) != get_another_random_with_args(1)
 
 
-def callTextChangeTest():
-    process = Popen(["python", "textChangeTest.py"], stdout=PIPE)
-    (output, err) = process.communicate()
+externalTestFile = "textChangeTest.py"
+
+
+def call_text_change_test():
+    process = Popen(["python", externalTestFile], stdout=PIPE)
+    output, err = process.communicate()
     exit_code = process.wait()
     assert exit_code == 0
 
     return output.strip()
 
 
-def changeText(orig, new):
-    with open("textChangeTest.py", "r+") as f:
+def change_function_text(orig, new):
+    with open(externalTestFile, "r+") as f:
         text = f.read()
-filename = "textChangeTest.py"
-with open(filename, 'w') as f:
-    f.write(re.sub(orig, new, text))
+        text = re.sub(orig, new, text)
         f.seek(0)
         f.write(text)
         f.truncate()
@@ -144,17 +145,19 @@ with open(filename, 'w') as f:
 
 
 def test_function_text_change():
-    changeText("World", "Hello")  # Assuming there was a previous test
+    change_function_text(
+        "World", "Hello"
+    )  # Assuming there was a previous test, otherwise line does nothing
 
-    output1 = callTextChangeTest()
-    output2 = callTextChangeTest()
+    output1 = call_text_change_test()
+    output2 = call_text_change_test()
     assert output1 == output2
 
-    changeText("Hello", "World")
+    change_function_text("Hello", "World")
 
-    output3 = callTextChangeTest()
+    output3 = call_text_change_test()
     assert output3 != output1
 
 
-if __name__ == "__main__":
-    test_function_text_change()
+# if __name__ == "__main__":
+#     test_function_text_change()
