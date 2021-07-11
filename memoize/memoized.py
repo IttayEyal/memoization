@@ -15,6 +15,7 @@ import queue
 import threading
 import platform
 import tempfile
+import inspect
 
 
 def moreCanonicalStr(var):
@@ -76,13 +77,14 @@ class Memoized(object):
             if Memoized.cacheDir == None:
                 return self.func(*args, **kwargs)
 
-            nameWithArgs = (
+            funcCallDetails = (
                 self.filename,
                 self.func.__name__,
+                inspect.getsource(self.func),
                 moreCanonicalStr(args),
                 moreCanonicalStr(kwargs),
             )
-            hashKey = hashlib.sha1(str(nameWithArgs).encode("utf-8")).hexdigest()
+            hashKey = hashlib.sha1(str(funcCallDetails).encode("utf-8")).hexdigest()
             filePath = self.cacheDir + "/" + hashKey + ".cache"
             ret = None
             if Memoized.readCache and os.path.exists(filePath):
