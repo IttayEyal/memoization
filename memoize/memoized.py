@@ -93,7 +93,7 @@ class Memoized(object):
                     print(e)
                     ret = None
                 resultFile.close()
-            if ret != None:
+            if not ret is None:
                 if self.debug:
                     stderr.write(
                         "Warning! Result of "
